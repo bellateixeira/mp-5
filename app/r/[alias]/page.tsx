@@ -1,7 +1,20 @@
+import { Metadata } from 'next';
 import getCollection, { URLS_COLLECTION } from '@/db';
 import { redirect } from 'next/navigation';
 
-export default async function RedirectPage({ params }: { params: { alias: string } }) {
+type Props = {
+    params: {
+        alias: string;
+    };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    return {
+        title: `Redirecting to: ${params.alias}`,
+    };
+}
+
+export default async function RedirectPage({ params }: Props) {
     const collection = await getCollection(URLS_COLLECTION);
     const result = await collection.findOne({ alias: params.alias });
 
