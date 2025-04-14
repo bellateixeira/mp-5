@@ -3,10 +3,12 @@ import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
-// @ts-expect-error — Next.js 15 breaks param typing in dynamic routes
-export default async function RedirectPage({ params }) {
+export default async function RedirectPage(
+    props: { params: { alias: string } }
+) {
+    const { alias } = props.params;
     const collection = await getCollection(URLS_COLLECTION);
-    const result = await collection.findOne({ alias: params.alias });
+    const result = await collection.findOne({ alias });
 
     if (result) {
         redirect(result.url);
